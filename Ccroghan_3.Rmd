@@ -1,0 +1,86 @@
+---
+title: "Assignment 3"
+author: "Cameron Croghan"
+date: "9/23/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Question 1##
+/* Weigelt objective function */
+
+Max: 420 L1 + 360 M1 + 300 S1 + 420 L2 + 360 M2 + 300 S2 + 420 L3 + 360 M3 + 300 S3;
+
+/* Constraints */
+
+/* capacity */
+L1 + M1 + S1 <= 750;
+L2 + M2 + S2 <= 900;
+L3 + M3 + S3 <= 450;
+
+/* square footage  */
+20 L1 + 15 M1 + 12 S1 <= 13000;
+20 L2 + 15 M2 + 12 S2 <= 12000;
+20 L3 + 15 M3 + 12 S3 <= 5000;
+
+/* sales  */
+L1 + L2 + L3 <= 900;
+M1 + M2 + M3 <= 1200;
+S1 + S2 + S3 <= 750;
+
+/* same percentage of capacity  */
+900 L1 + 900 M1 + 900 S1 - 750 L2 - 750 M2 - 750 S2 = 0;
+450 L1 + 450 M1 + 450 S1 - 750 L3 - 750 M3 - 750 S3 = 0;
+
+library(lpSolveAPI)
+lprec<-read.lp("weigelt.lp")
+solve(lprec)
+get.objective(lprec)
+get.variables(lprec)
+get.constraints(lprec)
+
+##Question 2##
+
+Shadow prices
+0 0 0 12 20 60 0 0 0 -.08 .56
+
+Dual Solution
+0 0 0 12 20 60 0 0 0 -.08 .56
+
+Reduced Cost
+0 0 -24 -40 0 0 -360 -120 0 
+
+##Question 3##
+
+Shadow Prices
+get.sensitivity.rhs(lprec)$dualstill[1:11])
+1- Price=0 Lower=-1e+30 Upper=1e+30
+2- Price=0 Lower=-1e+30 Upper=1e+30
+3- Price=0 Lower=-1e+30 Upper=1e+30
+4- Price=12 Lower=1.222e+4 Upper=1.389e+4
+5- Price=20 Lower=1.15e+4 Upper=1.25e+4
+6- Price=60 Lower=4.8e+3 Upper=5.182e+3
+7- Price=0 Lower=-1e+30 Upper=1e+30
+8- Price=0 Lower=-1e+30 Upper=1e+30
+9- Price=0 Lower=-1e+30 Upper=1e+30
+10- Price=-.08 Lower= -2.5e+4 Upper=2.5e+4
+11- Price=.56 Lower= -1.25e+4 Upper=1.25e+4
+
+Reduced Cost
+get.sensitivity.rhs(lprec)$dualsfrom[12:20], get.sensitivity.rhs(lprec)$dualstill[12:20])
+1- Cost=0 Lower=-1e+30 Upper=1e+30
+2- Cost=0 Lower=-1e+30 Upper=1e+30
+3- Cost=-24 Lower=-2.22e+2 Upper=1.11e+2
+4- Cost=-40 Lower=-1e+2 Upper=1e+2
+5- Cost=0 Lower=-1e+30 Upper=1e+30
+6- Cost=0 Lower=-1e+30 Upper=1e+30
+7- Cost=-360 Lower=2e+1 Upper=2.5e+1
+8- Cost=-120 Lower=-4.44e+1 Upper=6.66e+1
+9- Cost=0 Lower=-1e+30 Upper=1e+30
+
+##Question 4##
+
+The solution of the dual and the optimal objective value are the same as the primal problem.
